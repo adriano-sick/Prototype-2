@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float horizontalInput;
+    public float verticalInput;
+    public float speed = 10.0f;
+    public float xRange = 15;
+    public float xRangeZ = 7;
+    public float mouseFire1;
+
+    public GameObject projectilePrefab;
+    public GameObject projectilePrefab2;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //keep the player in bounds on left side
+        if (transform.position.x < -xRange)
+        {
+            transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
+        }
+
+        //keep the player in bounds on right side
+        if (transform.position.x > xRange)
+        {
+            transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
+        }
+
+        //keep the player in bounds on the botton
+        if (transform.position.z < -xRangeZ)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -xRangeZ);
+        }
+
+        //keep the player in bounds on up
+        if (transform.position.z > xRangeZ)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, xRangeZ);
+        }
+
+
+        //get users input
+        //horizontalInput = Input.GetAxis("Horizontal");
+        //verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Mouse X");
+        verticalInput = Input.GetAxis("Mouse Y");
+        mouseFire1 = Input.GetAxis("Fire1");
+
+
+        //moves player
+        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+        transform.Translate(Vector3.forward * verticalInput * Time.deltaTime * speed);
+
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            //Launch a projectile from the player
+            Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
+            
+        }
+        else if (mouseFire1 > 0)
+        {
+            
+            Instantiate(projectilePrefab2, transform.position, projectilePrefab2.transform.rotation);
+            
+            
+        }
+               
+    }
+}
